@@ -1,6 +1,6 @@
-var rq = '//mcapi.us/server/status?ip=88.214.56.216&port=25565';  	// <---- Your Minecraft server IP here; add &port=<port> if you are using a different port
-var error = 'unknown';				// of 25565. For instance: https://mcapi.us/server/status?ip=s.nerd.nu&port=25565 
-var classes = {					// more info in https://mcapi.us/
+var rq = '//api.syfaro.net/server/status';
+var error = 'unknown';
+var classes = {
 	error: "fa-question",
 	false: "fa-times",
 	true: "fa-check",
@@ -9,6 +9,7 @@ var allclasses = "";
 for(i in classes) {
 	allclasses += ' '+classes[i];
 };
+
 function q(addr, cb) {
 	$.ajax({
 		url: rq,
@@ -38,24 +39,32 @@ function settext(o, t) {
 }
 function display(data) {
 	var np = $('#numplayers'),
-	    version = $('#version'),
-	    online = $('#online'),
-	    motd = $('#motd'),
-	    updated = $('#updated'),
-	    d = new Date(data.last_updated*1000);
-	moment.locale('*');				// The locale which you have used before.
-	settext(updated, moment(d).fromNow());
+		version = $('#version'),
+		online = $('#online'),
+		motd = $('#motd'),
+        players = $('#players');
+    data.online = data.status === 'success';
+
 	setclass(online, data.online);
     if (data.online) {
-	settext(np, data.players.now);
-	settext(version, data.server.name);
-	settext(motd, data.motd);
+        settext(np, data.players.now);
+	    settext(version, data.server.name);
+	    settext(motd, data.motd);
+        if (data.players.sample) {
+            settext(players,
+                data.players.sample.map(function(v){
+                    return v.name;
+                }).join(', '));
+        } else {
+            settext(players, '');
+        }
     } else {
-	setclass(np, error);
-	setclass(version, error);
-	setclass(motd, error);
+        setclass(np, error);
+        setclass(version, error);
+        setclass(motd, error);
+        setclass(players, error);
     }
 }
 $(document).ready(function() {
-	q('//lentium.xyz', display);
+	q('88.214.56.216', display);
 });
