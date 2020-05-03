@@ -1,0 +1,16 @@
+.statusbox {
+	min-width: 5em;
+	min-height: 2em;
+	border: 1px solid #999;
+	border-radius: 1em;
+	background-color: #eee;
+	padding: 0.5em;
+	margin: 0.5em;
+}
+.label {
+	text-align: right;
+	float: left;
+	margin-right: 1em;
+	min-width: 8em;
+	color: #444;
+}
